@@ -43,20 +43,25 @@ function draw() {
   }
 
   // Snap into position
-  if(dist(CipheredData.x, CipheredData.y, center1.x, center1.y) < 60 && !mouseIsPressed){
-    CipheredData.position = center1;
+  if (!mouseIsPressed) {
+    switch (true) {
+      case dist(CipheredData.x, CipheredData.y, center1.x, center1.y) < 60:
+        CipheredData.position = center1;
+        break;
+      case dist(CipheredData.x, CipheredData.y, center2.x, center2.y) < 60:
+        CipheredData.position = center2;
+        break;
+      case dist(CipheredData.x, CipheredData.y, center3.x, center3.y) < 60:
+        CipheredData.position = center3;
+        break;
+      case dist(CipheredData.x, CipheredData.y, center4.x, center4.y) < 60:
+        CipheredData.position = center4;
+        break;
+      case dist(CipheredData.x, CipheredData.y, center5.x, center5.y) < 60:
+        CipheredData.position = center5;
+        break;
+      default:
+        break;
+      }
   }
-  else if(dist(CipheredData.x, CipheredData.y, center2.x, center2.y) < 60 && !mouseIsPressed){
-      CipheredData.position = center2;
-    }
-  else if(dist(CipheredData.x, CipheredData.y, center3.x, center3.y) < 60 && !mouseIsPressed){
-    CipheredData.position = center3;
-  }
-  else if(dist(CipheredData.x, CipheredData.y, center4.x, center4.y) < 60 && !mouseIsPressed){
-    CipheredData.position = center4;
-  }
-  else if(dist(CipheredData.x, CipheredData.y, center5.x, center5.y) < 60 && !mouseIsPressed){
-    CipheredData.position = center5;
-  }
-  
 }
