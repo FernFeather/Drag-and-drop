@@ -2,8 +2,8 @@ let cards = [];
 let Encrycption, CipheredData, publicKey, privateKey, plaintext, decriptedplaint;
 let EncrycptionImg, CipheredDataImg, publicKeyImg, privateKeyImg, plaintextImg, decriptedplaintxtImg;
 let center1, center2, center3, center4, center5;
-
 let screen = 0;
+let widthConstraint, heightConstraint;
 
 function mousePressed() {
   if (screen === 1) { // Game1
@@ -11,22 +11,21 @@ function mousePressed() {
     if (mouseX > width / 2 - 50 && mouseX < width / 2 + 50 && mouseY > height / 2 + 50 && mouseY < height / 2 + 90) {
       screen = 0;
       // Reset card positions to initial locations
-      CipheredData.position = createVector(width / 4, height - (height / 3));
-      publicKey.position = createVector(width / 4, height - (height / 3) + 50);
-      privateKey.position = createVector(width / 2, height - (height / 3) - 50);
-      plaintext.position = createVector(width / 2, height - (height / 3));
-      decriptedplaintxt.position = createVector(width / 2, height - (height / 3) + 50);
-      Encrycption.pos = { x: width / 2 + 10, y: 160 };
+      CipheredData.position = createVector(width / 4, height - (height / 3) + 85);
+      publicKey.position = createVector(width / 4, height - (height / 3) + 135);
+      privateKey.position = createVector(width / 2, height - (height / 3) + 35);
+      plaintext.position = createVector(width / 2, height - (height / 3) + 85);
+      decriptedplaintxt.position = createVector(width / 2, height - (height / 3) + 135);
+      Encrycption.pos = { x: width / 2 + 10, y: 160 + 85 };
     }
   }
 }
 
 function handleDragging(card) {
-  if (card.mouse.dragging()) {
-    card.moveTowards(
-      mouse.x + card.mouse.x,
-      mouse.y + card.mouse.y,
-      1);
+  if (card.mouse.dragging()) { //The card is constrained within the game window
+    widthConstraint = constrain(mouseX + card.mouse.x, card.width / 2, width - card.width / 2);
+    heightConstraint = constrain(mouseY + card.mouse.y, card.height / 2, height - card.height / 2);
+    card.position = createVector(widthConstraint, heightConstraint);
     card.rotationLock = true;
   } else {
     card.vel.x = 0;
@@ -36,22 +35,22 @@ function handleDragging(card) {
 }
 
 function snapToCenter(card) {
-  // Snap into position
+  // Snap into position and check if there is not already a card in the center position
   if (!mouseIsPressed) {
     switch (true) {
-      case dist(card.x, card.y, center1.x, center1.y) < 60:
+      case dist(card.x, card.y, center1.x, center1.y) < 60 && !cards.some(c => c != card && dist(c.x, c.y, center1.x, center1.y) < 60):
         card.position = center1;
         break;
-      case dist(card.x, card.y, center2.x, center2.y) < 60:
+      case dist(card.x, card.y, center2.x, center2.y) < 60 && !cards.some(c => c != card && dist(c.x, c.y, center2.x, center2.y) < 60):
         card.position = center2;
         break;
-      case dist(card.x, card.y, center3.x, center3.y) < 60:
+      case dist(card.x, card.y, center3.x, center3.y) < 60 && !cards.some(c => c != card && dist(c.x, c.y, center3.x, center3.y) < 60):
         card.position = center3;
         break;
-      case dist(card.x, card.y, center4.x, center4.y) < 60:
+      case dist(card.x, card.y, center4.x, center4.y) < 60 && !cards.some(c => c != card && dist(c.x, c.y, center4.x, center4.y) < 60):
         card.position = center4;
         break;
-      case dist(card.x, card.y, center5.x, center5.y) < 60:
+      case dist(card.x, card.y, center5.x, center5.y) < 60 && !cards.some(c => c != card && dist(c.x, c.y, center5.x, center5.y) < 60):
         card.position = center5;
         break;
       default:
@@ -70,42 +69,42 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(650, 600);
+  createCanvas(650, 620);
 
-  center1 = createVector(175, 175);
-  center2 = createVector(250, 280);
-  center3 = createVector(333, 187);
-  center4 = createVector(407, 280);
-  center5 = createVector(485, 175);
+  center1 = createVector(175, 175 + 85);
+  center2 = createVector(250, 280 + 85);
+  center3 = createVector(333, 187 + 85);
+  center4 = createVector(407, 280 + 85);
+  center5 = createVector(485, 175 + 85);
 
-  Encrycption = new Sprite(width / 2 + 10, 160);
+  Encrycption = new Sprite(width / 2 + 10, 160 + 85);
   Encrycption.addImage(EncrycptionImg);
   Encrycption.collider = 'k';
 
   cards = new Group();
   cards.collider = 'k';
 
-  CipheredData = new cards.Sprite(width / 4, height - (height / 3));
+  CipheredData = new cards.Sprite(width / 4, (height - (height / 3)) + 85);
   CipheredData.addImage(CipheredDataImg);
   CipheredData.scale = 0.50;
   cards[0] = CipheredData;
 
-  publicKey = new cards.Sprite((width / 4), height - (height / 3) + 50);
+  publicKey = new cards.Sprite((width / 4), height - (height / 3) + 135);
   publicKey.addImage(publicKeyImg);
   publicKey.scale = 0.50;
   cards[1] = publicKey;
 
-  privateKey = new cards.Sprite(width / 2, height - (height / 3) - 50);
+  privateKey = new cards.Sprite(width / 2, height - (height / 3) + 35);
   privateKey.addImage(privateKeyImg);
   privateKey.scale = 0.50;
   cards[2] = privateKey;
 
-  plaintext = new cards.Sprite(width / 2, height - (height / 3));
+  plaintext = new cards.Sprite(width / 2, height - (height / 3) + 85);
   plaintext.addImage(plaintextImg);
   plaintext.scale = 0.50;
   cards[3] = plaintext;
 
-  decriptedplaintxt = new cards.Sprite(width / 2, height - (height / 3) + 50);
+  decriptedplaintxt = new cards.Sprite(width / 2, height - (height / 3) + 135);
   decriptedplaintxt.addImage(decriptedplaintxtImg);
   decriptedplaintxt.scale = 0.50;
   cards[4] = decriptedplaintxt;
@@ -117,6 +116,18 @@ function draw() {
   background("white");
 
   if (screen === 0) {
+
+    // Define the text content
+    // Set text properties
+    noFill();
+    textSize(12); // Font size
+    rect(20, 10, 620, 74);
+
+    // Display text content
+    fill('black');
+    textAlign(LEFT, TOP); // Text alignment
+    text("Asymmetric encryption, also known as public-key encryption, is a type of encryption algorithm that uses a pair of keys (public and private) to encrypt and decrypt data. The image provided is a flow chart showcasing the process of asymmetric encryption. As you can see the steps seem to have been mixed up. Rearrange the list so that it follows steps 1-5 in the correct order.", 30, 20, 600, 360);
+
     for (let card of cards) {
       handleDragging(card);
       snapToCenter(card);
